@@ -18,6 +18,33 @@ const getData= () => {
   })
 }
 
+const getFilterData = (filter) => {
+  return new Promise(function(resolve, reject) {
+    const { column, condition, value } = filter;
+    let whereStr = `${column} ${condition} ${value}`;
+    const isString = typeof value == "string"
+
+    if (isString) {
+      whereStr = `${column} ${condition} '${value}'`;
+    }
+
+    if (condition === 'includes') {
+      if (isString) {
+        whereStr = `${column} LIKE '%${value}%'`;
+      } else {
+        whereStr = `${column} >= ${value}`;
+      }
+    }
+
+    pool.query(`SELECT * FROM my_table WHERE ${whereStr} ORDER BY id ASC`, (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+    })
+  })
+}
+
 const createData = (body) => {
   return new Promise(function(resolve, reject) {
     const { date, name, quantity, distance } = body
@@ -44,6 +71,7 @@ const deleteData = () => {
 
 module.exports = {
   getData,
+  getFilterData,
   createData,
   deleteData,
 }

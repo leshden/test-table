@@ -22,6 +22,16 @@ app.get('/', (req, res) => {
   })
 })
 
+app.post('/filter', (req, res) => {
+  postgres_model.getFilterData(req.body)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
 app.post('/test_req', (req, res) => {
   console.log(req.body);
 

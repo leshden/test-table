@@ -1,0 +1,17 @@
+form {
+  display: flex;
+  gap: 5px;
+}
+
+form input:first-child {
+  width: 20%;
+}
+
+form input {
+  width: 25%;
+}
+
+form td:last-child {
+  display: flex;
+  justify-content: space-around;
+}
