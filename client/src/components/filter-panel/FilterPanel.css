@@ -5,3 +5,7 @@ select {
 .input-filter {
   width: 20%;
 }
+
+.filter-button {
+  margin-left: 15px;
+}

@@ -1,7 +1,11 @@
 import './FilterPanel.css';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
+import {TableContext} from '../../contexts/TableContext';
+import {getData} from '../../requests/request_to_db';
+import moment from 'moment';
 
 const FilterPanel = () => {
+  const {setTable} = useContext(TableContext);
   const [filterData, setFilterData] = useState({
     column: 'name',
     condition: '=',
@@ -20,11 +24,15 @@ const FilterPanel = () => {
       },
       body: JSON.stringify({column: column, condition: condition, value: value}),
     }).then(response => {
-        return response.text();
+      return response.json();
+    }).then(data => {
+      const updateData = data.map(item => {
+        return {...item,
+        date:  moment(item.date).format("DD-MM-YYYY")
+        }
       })
-      .then(data => {
-        alert(data);
-      }).catch(error => {console.log(error)});
+      setTable(updateData);
+    });
   }
 
   const submitFilter = (e) => {
@@ -51,6 +59,11 @@ const FilterPanel = () => {
     setFilterData({...filterData, value: value })
   }
 
+  const resetOnClick = (e) => {
+    e.preventDefault();
+    getData((arr)=>  setTable(arr));
+  }
+
   return (
     <form onSubmit={submitFilter}>
       <select onChange = {onChangeColumn}>
@@ -65,7 +78,8 @@ const FilterPanel = () => {
         <option value="<">Less</option>
       </select>
       <input className='input-filter' type='text' required  onChange={onChangeValue}/>
-      <button type='submit'>Apply</button>
+      <button className='filter-button' type='submit'>Apply</button>
+      <button className='filter-button' onClick={resetOnClick}>Reset</button>
     </form>
   );
 }
