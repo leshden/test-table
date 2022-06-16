@@ -10,22 +10,43 @@ const AddData = () => {
     distanceName: 0,
   });
 
-  const addDataOnClick = (e) => {
+  function createData() {
+    let date = formData.dateName;
+    let name = formData.fullName;
+    let quantity = formData.quantityName;
+    let distance = formData.distanceName;
+
+    fetch('http://localhost:3001/test_req', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({date: date, name: name, quantity: quantity, distance: distance}),
+    }).then(response => {
+        return response.text();
+      })
+      .then(data => {
+        alert(data);
+      }).catch(error => {console.log(error)});
+  }
+
+  const addDataSubmit = (e) => {
     e.preventDefault();
-    console.log('Submit');
+    createData();
   }
 
   const fieldOnChange = (e) => {
+    e.preventDefault();
     const fieldName = e.target.getAttribute('name');
     const fieldValue = e.target.value;
 
-    setFormData({...formData, fieldName: fieldValue})
-
-    console.log(`value: ${formData}`);
+    const newFormData = {...formData};
+    newFormData[fieldName] = (fieldName.includes('quantity') || fieldName.includes('distance')) ? parseInt(fieldValue) : fieldValue;
+    setFormData(newFormData);
   }
 
   return(
-    <form onSubmit={addDataOnClick}>
+    <form onSubmit={addDataSubmit}>
       <input type='date'
              name='dateName'
              required='required'

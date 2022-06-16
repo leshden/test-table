@@ -22,18 +22,21 @@ app.get('/', (req, res) => {
   })
 })
 
-app.post('/data', (req, res) => {
-  merchant_model.createData(req.body)
+app.post('/test_req', (req, res) => {
+  console.log(req.body);
+
+  postgres_model.createData(req.body)
   .then(response => {
     res.status(200).send(response);
   })
   .catch(error => {
     res.status(500).send(error);
   })
+
 })
 
 app.delete('/data/:id', (req, res) => {
-  merchant_model.deleteData(req.params.id)
+  postgres_model.deleteData(req.params.id)
   .then(response => {
     res.status(200).send(response);
   })

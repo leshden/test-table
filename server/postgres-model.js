@@ -20,12 +20,12 @@ const getData= () => {
 
 const createData = (body) => {
   return new Promise(function(resolve, reject) {
-    const { name, email } = body
-    pool.query('INSERT INTO my_table (date, name, quantity, distance) VALUES ($1, $2, $3, $4) RETURNING *', [date, name, quantity, distance], (error, results) => {
+    const { date, name, quantity, distance } = body
+    pool.query('INSERT INTO my_table (date, name, quantity, distance) VALUES ($1, $2, $3, $4)', [date, name, quantity, distance], (error, results) => {
       if (error) {
         reject(error)
       }
-      resolve(`A new data has been added added: ${results.rows[0]}`)
+      console.log('A new data has been added');
     })
   })
 }
