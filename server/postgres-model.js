@@ -53,6 +53,7 @@ const createData = (body) => {
         reject(error)
       }
       console.log('A new data has been added');
+      resolve(results.rows);
     })
   })
 }

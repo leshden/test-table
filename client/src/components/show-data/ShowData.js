@@ -1,27 +1,13 @@
 import './ShowData.css';
-import {useEffect, useState} from 'react';
-import moment from 'moment';
+import {useEffect, useState, useContext} from 'react';
+import {TableContext} from '../../contexts/TableContext';
+import {getData} from '../../requests/request_to_db';
 
 const ShowData = () => {
-  const [formData, setFormData] = useState([]);
-
-  function getData() {
-    fetch('http://localhost:3001')
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        const updateData = data.map(item => {
-          return {...item,
-          date:  moment(item.date).format("DD-MM-YYYY")
-          }
-        })
-        setFormData(updateData);
-      });
-  }
+  const {table, setTable} = useContext(TableContext);
 
   useEffect(()=>{
-    getData();
+    getData((arr)=>  setTable(arr));
   }, []);
 
   return (
@@ -36,7 +22,7 @@ const ShowData = () => {
       </thead>
       <tbody>
         {
-          formData.map(item => {
+          table.map(item => {
             return(
               <tr key={item.id}>
                 <td>{item.date}</td>

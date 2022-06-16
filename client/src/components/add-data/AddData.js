@@ -1,8 +1,10 @@
 import './AddData.css';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
+import {TableContext} from '../../contexts/TableContext';
+import {getData} from '../../requests/request_to_db';
 
 const AddData = () => {
-
+  const {setTable} = useContext(TableContext);
   const [formData, setFormData] = useState({
     dateName: '',
     fullName: '',
@@ -17,17 +19,14 @@ const AddData = () => {
     let distance = formData.distanceName;
 
     fetch('http://localhost:3001/test_req', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({date: date, name: name, quantity: quantity, distance: distance}),
-    }).then(response => {
-        return response.text();
-      })
-      .then(data => {
-        alert(data);
-      }).catch(error => {console.log(error)});
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({date: date, name: name, quantity: quantity, distance: distance}),
+      }).then(response => {
+        getData((arr)=>  setTable(arr));
+      });
   }
 
   const addDataSubmit = (e) => {
