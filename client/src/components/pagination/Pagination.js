@@ -22,7 +22,7 @@ const Pagination = () => {
       <ul className='ul-conatainer'>
         { pages.map(page => { return (
             <li key={page} className='page-item'>
-              <a href='!#' className='page-link' onClick={()=>{pageOnClick(page)}}>
+              <a href='!#' className='page-link' role="button" onClick={()=>{pageOnClick(page)}}>
                 {page}
               </a>
             </li>)
