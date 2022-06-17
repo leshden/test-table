@@ -10,8 +10,8 @@ function App() {
     <div className="App">
       <TableProvider>
         <ShowData />
-        <h2>Add a Data</h2>
         <Pagination />
+        <h2>Add a Data</h2>
         <AddData />
         <h2>Filter Panel</h2>
         <FilterPanel />

@@ -3,9 +3,10 @@ import {useState, useContext} from 'react';
 import {TableContext} from '../../contexts/TableContext';
 import {getData} from '../../requests/request_to_db';
 import moment from 'moment';
+import {COUNTPAGES} from '../pagination/Pagination';
 
 const FilterPanel = () => {
-  const {setTable} = useContext(TableContext);
+  const {setTable, setNumberPage} = useContext(TableContext);
   const [filterData, setFilterData] = useState({
     column: 'name',
     condition: '=',
@@ -32,6 +33,8 @@ const FilterPanel = () => {
         }
       })
       setTable(updateData);
+      const pages = Math.ceil(updateData.length/COUNTPAGES);
+      setNumberPage(pages === 0 ? 1 : pages);
     });
   }
 
@@ -61,7 +64,12 @@ const FilterPanel = () => {
 
   const resetOnClick = (e) => {
     e.preventDefault();
-    getData((arr)=>  setTable(arr));
+    //getData((arr)=>  setTable(arr));
+    getData((arr)=>  {
+      const pages = Math.ceil(arr.length/COUNTPAGES);
+      setNumberPage(pages === 0 ? 1 : pages);
+      setTable(arr);
+      });
   }
 
   return (

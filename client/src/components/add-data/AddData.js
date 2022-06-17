@@ -2,9 +2,10 @@ import './AddData.css';
 import {useState, useContext} from 'react';
 import {TableContext} from '../../contexts/TableContext';
 import {getData} from '../../requests/request_to_db';
+import {COUNTPAGES} from '../pagination/Pagination';
 
 const AddData = () => {
-  const {setTable} = useContext(TableContext);
+  const {setTable, setNumberPage} = useContext(TableContext);
   const [formData, setFormData] = useState({
     dateName: '',
     fullName: '',
@@ -25,7 +26,12 @@ const AddData = () => {
         },
         body: JSON.stringify({date: date, name: name, quantity: quantity, distance: distance}),
       }).then(response => {
-        getData((arr)=>  setTable(arr));
+        //getData((arr)=>  setTable(arr));
+        getData((arr)=>  {
+          const pages = Math.ceil(arr.length/COUNTPAGES);
+          setNumberPage(pages === 0 ? 1 : pages);
+          setTable(arr);
+          });
       });
   }
 
